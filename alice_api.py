@@ -5,6 +5,7 @@ Alice API library using requests
 Alice API Python Wrapper using Requests (https://github.com/kennethreitz/requests)
 Full documentation
 is at <http://python-requests.org>.
+Alice API at <http://developer.aliceapp.com/staff.html>
 2016 by <ion@key.co>
 
 """
@@ -32,14 +33,17 @@ class Alice:
         }
 
     def request(self, url, method, json=None):
+        # NOTE: Add response status check.
         try:
             if method == 'GET':
                 return requests.get(url, headers=self.headers, params=self.querystring).json()
 
             elif method == 'POST':
-                if json is None:
-                    print 'Empty JSON form. Nothing to create.'
                 return requests.post(url, headers=self.headers, params=self.querystring, json=json)
+
+            elif method == 'PUT':
+                return requests.put(url, headers=self.headers, params=self.querystring, json=json)
+
         except requests.exceptions.Timeout:
             # Retry or retry loop
             pass
@@ -115,3 +119,79 @@ class Alice:
         else:
             url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/arrivals/bulk"
             return self.request(url, "POST", json_form)
+
+    # =============================================================== #
+    # From [ staff-workflow-status-api ]
+    def get_workflow_statuses(self, hotel_id):
+        """
+         GET : (Alice note) Search for workflow statuses.
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/workflowStatuses"
+        return self.request(url, "GET")
+
+    # =============================================================== #
+    # From [ staff-reservation-api ]
+    def get_hotel_reservations(self, hotel_id):
+        """
+         GET : (Alice note) Search for reservations. Total number of found reservations is returned in X-Total-Count header
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/reservations"
+        return self.request(url, "GET")
+
+    def create_hotel_reservation(self, hotel_id, json_form):
+        """
+        POST : (Alice note) Create reservation.
+        """
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to create.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/reservations"
+            return self.request(url, "POST", json_form)
+
+    def update_hotel_reservation(self, hotel_id, reservation_id, json_form):
+        """
+        PUT : (Alice note) Update reservation.
+        sample json form:
+        {'reservationNumber': 'zErk1oRzfl',
+         'status': 'Approved',
+         'end': '2017-01-21T05:00:00Z',
+         'uuid': '3a600abc-d611-4008-97a2-a69e4bfa769e',
+         'firstname': 'Aladdin',
+         'lastname': 'Grant',
+         'id': 212136,
+         'start': '2017-01-19T05:00:00Z',
+         'email': 'david+alangrant@key.co'}
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/reservations/" + str(reservation_id)
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to update.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/reservations"
+            return self.request(url, "POST", json_form)
+
+
+    # =============================================================== #
+    # From [ staff-data-sets-api ]
+    def get_dashboard_data(self, hotel_id, dashboard_id):
+        """
+         GET : (Alice note) Load data sets for the given dashboard.
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/dashboards/" + str(dashboard_id) + "/dataSets"
+        return self.request(url, "GET")
+
+    def get_all_dashboards(self, hotel_id):
+        """
+        GET : (Alice note) Load dashboards for the given hotel.
+       """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/dashboards"
+        return self.request(url, "GET")
+
+    # =============================================================== #
+    # From [ staff-hotel-user-api ]
+    def get_all_services(self, hotel_id):
+        """
+         GET : (Alice note) Load data sets for the given dashboard.
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/users"
+        return self.request(url, "GET")
+    
