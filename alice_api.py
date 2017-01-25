@@ -167,7 +167,7 @@ class Alice:
             print 'Error: empty JSON form. Nothing to update.'
         else:
             url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/reservations"
-            return self.request(url, "POST", json_form)
+            return self.request(url, "PUT", json_form)
 
 
     # =============================================================== #
@@ -194,4 +194,102 @@ class Alice:
         """
         url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/users"
         return self.request(url, "GET")
+
+    # =============================================================== #
+    # From [ staff-tickets-api ]
+    def get_all_tickets(self, hotel_id):
+        """
+         GET : (Alice note) Search for tickets. Total number of found tickets is returned in X-Total-Count header.
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets"
+        return self.request(url, "GET")
+
+    def get_ticket(self, hotel_id, ticket_id):
+        """
+         GET : (Alice note) Load ticket.
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/" + str(ticket_id)
+        return self.request(url, "GET")
+
+    def get_ticket_messages(self, hotel_id, ticket_id):
+        """
+         GET : (Alice note) Load all messages for ticket.
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/" + str(ticket_id) + "/messages"
+        return self.request(url, "GET")
+
+    def get_ticket_transitions(self, hotel_id, ticket_id):
+        """
+         GET : (Alice note) Workflow statuses allowed for transition for the ticket.
+
+        """
+        url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/" + str(ticket_id) + "/transitions"
+        return self.request(url, "GET")
+
+    def update_ticket_messages(self, hotel_id, ticket_id, json_form):
+        """
+        PUT : (Alice note) Add message to ticket.
+
+        """
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to update.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/" + str(ticket_id) + "/messages"
+            return self.request(url, "PUT", json_form)
+
+    def update_menu_order(self, hotel_id, ticket_id, json_form):
+        """
+        PUT : (Alice note) All parameters are optional. Only specified parameters will be updated.
+
+        """
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to update.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/" + str(ticket_id) + "/menuOrder"
+            return self.request(url, "PUT", json_form)
+
+    def update_service_request(self, hotel_id, ticket_id, json_form):
+        """
+        PUT : (Alice note) All parameters are optional. Only specified parameters will be updated.
+
+        """
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to update.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/" + str(ticket_id) + "/serviceRequest"
+            return self.request(url, "PUT", json_form)
+
+    def update_workflow_status(self, hotel_id, ticket_id, json_form):
+        """
+        PUT : (Alice note) Update ticket workflow status.
+
+        """
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to update.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/" + str(ticket_id) + "/workflowStatus"
+            return self.request(url, "PUT", json_form)
+
+    def create_offline_request(self, hotel_id, json_form):
+        """
+        POST : (Alice note) Create offline request.
+
+        """
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to update.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/offlineRequest"
+            return self.request(url, "POST", json_form)
+
+    def create_service_request(self, hotel_id, json_form):
+        """
+        POST : (Alice note) Create service request.
+
+        """
+        if len(json_form) == 0:
+            print 'Error: empty JSON form. Nothing to update.'
+        else:
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/serviceRequest"
+            return self.request(url, "POST", json_form)
+
     
