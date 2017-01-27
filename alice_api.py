@@ -166,7 +166,7 @@ class Alice:
         if len(json_form) == 0:
             print 'Error: empty JSON form. Nothing to update.'
         else:
-            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/reservations"
+            url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/reservations/" + str(reservation_id)
             return self.request(url, "PUT", json_form)
 
 
@@ -291,5 +291,3 @@ class Alice:
         else:
             url = self.uri_root + "staff/v1/hotels/" + str(hotel_id) + "/tickets/serviceRequest"
             return self.request(url, "POST", json_form)
-
-    
